@@ -1,19 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum Weapon
+{
+    Laser,
+    Beam,
+    Missile
+}
+
 public abstract class ShipWeapon : MonoBehaviour
 {
-    private Owner _owner;
+    protected ShipController _shipController;
 
     private Weapon _type;
     private int _level = 1;
     private bool _isReloading = false;
 
     // Use this for initialization
-    /*void Start()
+    void Start()
     {
+        _shipController = this.GetComponent<ShipController>();
 
-    }*/
+        OnStart();
+    }
 
     // Update is called once per frame
     /*void Update()
@@ -36,15 +45,15 @@ public abstract class ShipWeapon : MonoBehaviour
 
     public Owner Owner
     {
-        get { return _owner; }
+        get { return _shipController.Owner; }
     }
 
     //============================================================
 
-    public void Initialize(Owner owner)
+    /*public void Initialize(Owner owner)
     {
         _owner = owner;
-    }
+    }*/
 
     public void IncreaseLevel()
     {
@@ -70,6 +79,8 @@ public abstract class ShipWeapon : MonoBehaviour
     }
 
     //============================================================
+
+    protected abstract void OnStart();
 
     public abstract float GetReloadTime();
 

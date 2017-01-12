@@ -15,11 +15,37 @@ public class LaserProjectile : Projectile
     // Update is called once per frame
     void Update()
     {
-        Vector3 movement = this.transform.up * 2 * Time.deltaTime;
+        Vector3 movement = this.transform.up * WeaponSettings.Instance._laserSpeed * Time.deltaTime;
+
+        if(this._owner == Owner.Enemy)
+        {
+            movement *= -1;
+        }
+
         this.transform.Translate(movement);
     }
 
-    public override void Initialize(int level, Owner owner, Vector3 position, Vector3 eulerAngles)
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (this._owner == Owner.Player && collider.gameObject.tag == "Enemy")
+        {
+            EnemyController enemyScript = collider.gameObject.GetComponent<EnemyController>();
+
+            enemyScript.DoDamage(WeaponSettings.Instance._laserDamage);
+
+            Destroy(this.gameObject);
+        }
+        else if (this.Owner == Owner.Enemy && collider.gameObject.tag == "Player")
+        {
+            PlayerController playerScript = collider.gameObject.GetComponent<PlayerController>();
+
+            playerScript.DoDamage(WeaponSettings.Instance._laserDamage);
+
+            Destroy(this.gameObject);
+        }
+    }
+
+    public override void Initialize(Owner owner, Vector3 position, Vector3 eulerAngles)
     {
         _owner = owner;
 
@@ -27,8 +53,8 @@ public class LaserProjectile : Projectile
         this.transform.eulerAngles = eulerAngles;
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    public override Weapon GetWeaponType()
     {
-
+        return Weapon.Laser;
     }
 }
