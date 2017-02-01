@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class EnemyController : ShipController
+/*public class EnemyController : ShipController
 {
     public float _baseSpeed = 0.2f;
     public float _fireRate = 2f;
@@ -55,4 +55,4 @@ public class EnemyController : ShipController
     {
         _hasFired = false;
     }
-}
+}*/

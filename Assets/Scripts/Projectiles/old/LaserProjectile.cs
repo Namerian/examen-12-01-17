@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class LaserProjectile : Projectile
+/*public class LaserProjectile : Projectile
 {
     
 
@@ -57,4 +57,4 @@ public class LaserProjectile : Projectile
     {
         return Weapon.Laser;
     }
-}
+}*/

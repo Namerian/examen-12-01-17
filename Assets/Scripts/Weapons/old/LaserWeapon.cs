@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class LaserWeapon : ShipWeapon
+/*public class LaserWeapon : ShipWeapon
 {
     private CircleCollider2D _collider;
 
@@ -42,4 +42,4 @@ public class LaserWeapon : ShipWeapon
 
         projectileScript.Initialize(this.Owner, position, this.transform.eulerAngles);
     }
-}
+}*/

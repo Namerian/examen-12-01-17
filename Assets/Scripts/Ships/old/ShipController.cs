@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum Owner
+/*public enum Owner
 {
     Player,
     Enemy
@@ -48,4 +48,4 @@ public abstract class ShipController : MonoBehaviour
     public Owner Owner { get { return _owner; } }
 
     public float HealthPoints { get { return _currentHealthPoints; } }
-}
+}*/

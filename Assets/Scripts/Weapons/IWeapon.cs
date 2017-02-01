@@ -3,6 +3,8 @@ using System.Collections;
 
 public interface IWeapon
 {
+	EWeapon Type{ get; }
+
 	int Level{ get; }
 
 	void LevelUp ();
@@ -10,4 +12,6 @@ public interface IWeapon
 	void Reset ();
 
 	bool Fire ();
+
+	void DropUpgrade ();
 }

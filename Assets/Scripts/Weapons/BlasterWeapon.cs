@@ -11,6 +11,8 @@ public class BlasterWeapon : MonoBehaviour, IWeapon
 	private int _level = 1;
 	private bool _isReloading = false;
 
+	public EWeapon Type{ get { return EWeapon.Blaster; } }
+
 	public int Level{ get { return _level; } }
 
 	// Use this for initialization
@@ -39,18 +41,38 @@ public class BlasterWeapon : MonoBehaviour, IWeapon
 
 	public bool Fire ()
 	{
+		if (_isReloading) {
+			return false;
+		}
+
+		GameObject projectileObj;
+		IProjectile projectileScript;
+
 		switch (_level) {
 		case 1:
-			GameObject projectileObj = Instantiate (Resources.Load ("Prefabs/Projectiles/BlasterProjectile"), this.transform.position, Quaternion.identity) as GameObject;
-			IProjectile projectileScript = projectileObj.GetComponent<IProjectile> ();
+			projectileObj = Instantiate (Resources.Load ("Prefabs/Projectiles/BlasterProjectile"), this.transform.position, Quaternion.identity) as GameObject;
+			projectileScript = projectileObj.GetComponent<IProjectile> ();
 			projectileScript.Initialize (_ship.Team, _ship.Direction);
 
 			_isReloading = true;
-			Invoke ("OnReloadTimerOver", _reloadTime);
+			Invoke ("OnReloadTimeOver", _reloadTime);
 			return true;
 		case 2:
-			break;
+			projectileObj = Instantiate (Resources.Load ("Prefabs/Projectiles/BigBlasterProjectile"), this.transform.position, Quaternion.identity) as GameObject;
+			projectileScript = projectileObj.GetComponent<IProjectile> ();
+			projectileScript.Initialize (_ship.Team, _ship.Direction);
+
+			_isReloading = true;
+			Invoke ("OnReloadTimeOver", _reloadTime);
+			return true;
 		case 3:
+			projectileObj = Instantiate (Resources.Load ("Prefabs/Projectiles/BigBlasterProjectile"), this.transform.position, Quaternion.identity) as GameObject;
+			projectileScript = projectileObj.GetComponent<IProjectile> ();
+			projectileScript.Initialize (_ship.Team, _ship.Direction);
+
+			_isReloading = true;
+			Invoke ("OnReloadTimeOver", 0.1f);
+			return true;
 			break;
 		}
 
@@ -60,5 +82,10 @@ public class BlasterWeapon : MonoBehaviour, IWeapon
 	private void OnReloadTimeOver ()
 	{
 		_isReloading = false;
+	}
+
+	public void DropUpgrade ()
+	{
+		Instantiate (Resources.Load ("Prefabs/WeaponUpgrades/BlasterWeaponUpgrade"), this.transform.position, Quaternion.identity);
 	}
 }

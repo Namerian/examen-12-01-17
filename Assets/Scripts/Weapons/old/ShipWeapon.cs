@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum Weapon
+/*public enum Weapon
 {
     Laser,
     Beam,
@@ -25,10 +25,10 @@ public abstract class ShipWeapon : MonoBehaviour
     }
 
     // Update is called once per frame
-    /*void Update()
+    void Update()
     {
 
-    }*/
+    }
 
     //============================================================
 
@@ -50,10 +50,10 @@ public abstract class ShipWeapon : MonoBehaviour
 
     //============================================================
 
-    /*public void Initialize(Owner owner)
+    public void Initialize(Owner owner)
     {
         _owner = owner;
-    }*/
+    }
 
     public void IncreaseLevel()
     {
@@ -90,4 +90,4 @@ public abstract class ShipWeapon : MonoBehaviour
     {
         _isReloading = false;
     }
-}
+}*/

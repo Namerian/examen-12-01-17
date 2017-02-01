@@ -4,114 +4,77 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+	public static GameManager Instance { get; private set; }
 
-    public PlayerController _PlayerController { get; set; }
-    public GameOverPanelView _GameOverPanelView { get; set; }
-    public float _BaseScrollSpeed { get; set; }
+	[SerializeField]
+	private GameObject[] _waves;
 
-    private List<ShipController> _currentWave = new List<ShipController>();
-    private int _score = 0;
+	public PlayerShip _PlayerShip { get; set; }
 
-    //=======================================================================
+	public GameOverPanelView _GameOverPanelView { get; set; }
 
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
-    }
+	public float _BaseScrollSpeed { get; set; }
 
-    // Use this for initialization
-    void Start()
-    {
-        SpawnWave();
+	private List<IShip> _currentWave = new List<IShip> ();
+	private int _score = 0;
 
-        InfoPanelView.Instance.SetScore(_score);
-    }
+	//=======================================================================
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (_currentWave.Count == 0)
-        {
-            SpawnWave();
-        }
-    }
+	void Awake ()
+	{
+		if (Instance == null) {
+			Instance = this;
+		} else {
+			Destroy (this);
+		}
+	}
 
-    //=======================================================================
+	// Use this for initialization
+	void Start ()
+	{
+		SpawnWave ();
 
-    public void OnShipDestroyed(ShipController ship)
-    {
-        if (ship.Owner == Owner.Enemy)
-        {
-            _currentWave.Remove(ship);
+		InfoPanelView.Instance.SetScore (_score);
+	}
 
-            if (ship.HealthPoints == 0)
-            {
-                _score += 1;
-            }
+	// Update is called once per frame
+	void Update ()
+	{
+		if (_currentWave.Count == 0) {
+			SpawnWave ();
+		}
+	}
 
+	//=======================================================================
 
-            InfoPanelView.Instance.SetScore(_score);
-        }
-        else if (ship.Owner == Owner.Player)
-        {
-            Time.timeScale = 0;
-            _GameOverPanelView.SetVisible(true);
-            _GameOverPanelView.SetScore(_score);
-        }
-    }
+	public void OnShipDestroyed (IShip ship, bool destroyedByPlayer = false)
+	{
+		if (ship.Team == ETeam.Enemies) {
+			_currentWave.Remove (ship);
 
-    //=======================================================================
+			if (destroyedByPlayer) {
+				_score += 1;
+			}
 
-    private void SpawnWave()
-    {
-        _currentWave.Clear();
-        int index = UnityEngine.Random.Range(1, 1);
+			InfoPanelView.Instance.SetScore (_score);
+		} else if (ship.Team == ETeam.Player) {
+			Time.timeScale = 0;
+			_GameOverPanelView.SetVisible (true);
+			_GameOverPanelView.SetScore (_score);
+		}
+	}
 
-        switch (index)
-        {
-            case 1:
-                _currentWave.Add(SpawnEnemy(-1, 4, Weapon.Laser));
-                _currentWave.Add(SpawnEnemy(1, 4, Weapon.Laser));
-                _currentWave.Add(SpawnEnemy(3, 4, Weapon.Laser));
-                _currentWave.Add(SpawnEnemy(0, 5, Weapon.Laser));
-                _currentWave.Add(SpawnEnemy(2, 5, Weapon.Laser));
-                break;
-        }
-    }
+	//=======================================================================
 
-    private ShipController SpawnEnemy(float xPos, float yPos, Weapon type)
-    {
-        GameObject enemyObj;
+	private void SpawnWave ()
+	{
+		_currentWave.Clear ();
+		int index = UnityEngine.Random.Range (0, _waves.Length);
 
-        if (type == Weapon.Beam)
-        {
-            enemyObj = (GameObject)Instantiate(Resources.Load("Prefabs/Enemies/BeamEnemy"), this.transform);
-        }
-        else if (type == Weapon.Missile)
-        {
-            enemyObj = (GameObject)Instantiate(Resources.Load("Prefabs/Enemies/MissileEnemy"), this.transform);
-        }
-        else
-        {
-            enemyObj = (GameObject)Instantiate(Resources.Load("Prefabs/Enemies/LaserEnemy"), this.transform);
-        }
+		GameObject waveObj = Instantiate (_waves [index]);
 
-        Vector3 position = enemyObj.transform.position;
-        position.x = xPos;
-        position.y = yPos;
-        enemyObj.transform.position = position;
-
-        return enemyObj.GetComponent<ShipController>();
-    }
-
-    //=======================================================================
-
+		foreach (IShip ship in waveObj.GetComponentsInChildren<IShip>()) {
+			_currentWave.Add (ship);
+		}
+	}
 }

@@ -2,7 +2,7 @@
 using System.Collections;
 
 
-public class PlayerController : ShipController
+/*public class PlayerController : ShipController
 {
     public float _baseSpeed = 1;
     public float _verticalSpeed = 1;
@@ -114,4 +114,4 @@ public class PlayerController : ShipController
         _isInvincible = false;
         _haloComponent.enabled = false;
     }
-}
+}*/
